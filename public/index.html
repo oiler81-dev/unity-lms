@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unity MSK Quiz Portal</title>
+  <meta name="description" content="Unity MSK training assessment portal for front desk check-in workflows.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <header class="shell topbar">
+    <a class="brand" href="./">
+      <img src="assets/unitymsk-logo.svg" alt="Unity MSK logo" class="brand-logo">
+      <div>
+        <div class="eyebrow">Training Portal</div>
+        <h1>Unity MSK Quiz Center</h1>
+      </div>
+    </a>
+
+    <div class="top-actions">
+      <a class="link-btn" href="admin.html">Admin</a>
+      <button id="loginBtn" class="btn btn-primary">Sign in</button>
+      <button id="logoutBtn" class="btn btn-secondary" hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="shell main-grid">
+    <section class="hero card">
+      <div class="eyebrow">UNITY MSK</div>
+      <h2 id="quizTitle">Front Desk Check-In Assessment</h2>
+      <p class="lede">Passing score is 90% or higher. There are 20 questions worth 5 points each. If you score below 90, the correct answers are shown and you must retake the assessment.</p>
+      <div class="pill-row">
+        <span class="pill"><strong>Questions</strong><span id="questionCount">20</span></span>
+        <span class="pill"><strong>Points each</strong><span>5</span></span>
+        <span class="pill"><strong>Passing</strong><span>90%</span></span>
+        <span class="pill"><strong>Attempt</strong><span id="attemptNumber">1</span></span>
+      </div>
+    </section>
+
+    <aside class="status-panel card">
+      <h3>Session</h3>
+      <dl class="meta-list">
+        <div><dt>User</dt><dd id="userName">Not signed in</dd></div>
+        <div><dt>Email</dt><dd id="userEmail">—</dd></div>
+        <div><dt>Timer</dt><dd id="timer">00:00</dd></div>
+        <div><dt>Status</dt><dd id="sessionStatus">Waiting to start</dd></div>
+      </dl>
+      <button id="startBtn" class="btn btn-primary btn-block" disabled>Sign in to start</button>
+      <p class="small-note">Azure sign-in is required. Admin reporting uses the same authenticated session.</p>
+    </aside>
+
+    <section id="welcomeCard" class="card span-2">
+      <h3>Instructions</h3>
+      <ol class="simple-list">
+        <li>Sign in with your UnityMSK account.</li>
+        <li>Complete all 20 questions.</li>
+        <li>A 90 or above is required to pass.</li>
+        <li>If you fail, review the correct answers and retake the quiz.</li>
+        <li>On every failed retake, question order is shuffled.</li>
+      </ol>
+    </section>
+
+    <form id="quizForm" class="card span-2" hidden></form>
+    <section id="resultCard" class="card span-2" hidden></section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
