@@ -1,101 +1,122 @@
 const $ = (id) => document.getElementById(id);
 
-function formatSeconds(total) {
-  if (!Number.isFinite(total)) return '—';
-  const minutes = Math.floor(total / 60);
-  const seconds = Math.floor(total % 60).toString().padStart(2, '0');
-  return `${minutes}:${seconds}`;
+let rawRows = [];
+
+function formatDuration(seconds) {
+  const mins = Math.floor((seconds || 0) / 60);
+  const secs = (seconds || 0) % 60;
+  return `${mins}m ${String(secs).padStart(2, "0")}s`;
 }
 
-function setAuthUi(signedIn) {
-  $('loginBtn').hidden = signedIn;
-  $('logoutBtn').hidden = !signedIn;
+function downloadCsv(filename, rows) {
+  const csv = rows.map((r) => r.map((v) => `"${String(v ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
-async function getAuthUser() {
-  const res = await fetch('/.auth/me');
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data?.clientPrincipal || null;
-}
-
-function renderMetrics(metrics) {
-  $('mUsers').textContent = metrics.totalUsers;
-  $('mAttempts').textContent = metrics.totalAttempts;
-  $('mPassRate').textContent = `${metrics.passRate}%`;
-  $('mAvgScore').textContent = `${metrics.averageScore}%`;
-  $('mAvgAttempts').textContent = metrics.averageAttemptsPerUser;
-  $('mAvgDuration').textContent = formatSeconds(metrics.averageDurationSeconds);
-}
-
-function renderUsers(users) {
-  const tbody = document.querySelector('#usersTable tbody');
-  tbody.innerHTML = users.map((user) => `
+function renderTable(rows) {
+  const tbody = $("adminTableBody");
+  tbody.innerHTML = rows.map((row) => `
     <tr>
-      <td>${user.displayName}</td>
-      <td>${user.email}</td>
-      <td>${user.attempts}</td>
-      <td>${user.averageScore}%</td>
-      <td>${user.latestScore}%</td>
-      <td>${user.bestScore}%</td>
-      <td><span class="status-pill ${user.passedEver ? 'ok' : 'warn'}">${user.passedEver ? 'Yes' : 'No'}</span></td>
-      <td>${formatSeconds(user.latestDurationSeconds)}</td>
-      <td><span class="status-pill ${user.thirdFailRisk ? 'danger' : 'ok'}">${user.thirdFailRisk ? '3+ fails' : 'Clear'}</span></td>
+      <td>${row.displayName || ""}</td>
+      <td>${row.email || ""}</td>
+      <td>${row.courseTitle || ""}</td>
+      <td>${row.attemptCount || 0}</td>
+      <td>${row.averageScore || 0}%</td>
+      <td>${row.latestScore || 0}%</td>
+      <td>${row.bestScore || 0}%</td>
+      <td>${row.passed ? "Yes" : "No"}</td>
+      <td>${formatDuration(row.latestDurationSeconds || 0)}</td>
+      <td>${row.lastAttemptAt ? new Date(row.lastAttemptAt).toLocaleString() : ""}</td>
+      <td>${row.thirdFailNotified ? "Yes" : "No"}</td>
     </tr>
-  `).join('');
+  `).join("");
 }
 
-function renderAttempts(attempts) {
-  const tbody = document.querySelector('#attemptsTable tbody');
-  tbody.innerHTML = attempts.map((attempt) => `
-    <tr>
-      <td>${new Date(attempt.submittedAt).toLocaleString()}</td>
-      <td>${attempt.displayName}</td>
-      <td>${attempt.email}</td>
-      <td>${attempt.attemptNumber}</td>
-      <td>${attempt.score}%</td>
-      <td><span class="status-pill ${attempt.passed ? 'ok' : 'warn'}">${attempt.passed ? 'Pass' : 'Fail'}</span></td>
-      <td>${formatSeconds(Number(attempt.durationSeconds || 0))}</td>
-      <td>${attempt.shuffled ? 'Yes' : 'No'}</td>
-    </tr>
-  `).join('');
+function renderStats(summary) {
+  $("totalUsers").textContent = summary.totalUsers;
+  $("totalAttempts").textContent = summary.totalAttempts;
+  $("passRate").textContent = `${summary.passRate}%`;
+  $("averageScore").textContent = `${summary.averageScore}%`;
+  $("averageTime").textContent = formatDuration(summary.averageDurationSeconds || 0);
+  $("thirdFailCount").textContent = summary.thirdFailCount;
 }
 
-async function loadAdminReport() {
-  $('adminStatus').textContent = 'Loading report...';
-  const res = await fetch('/api/getAdminReport');
-  const data = await res.json();
+function applyFilters() {
+  const q = $("searchInput").value.trim().toLowerCase();
+  const courseFilter = $("courseFilter").value;
 
+  const filtered = rawRows.filter((row) => {
+    const matchesSearch =
+      !q ||
+      (row.displayName || "").toLowerCase().includes(q) ||
+      (row.email || "").toLowerCase().includes(q);
+
+    const matchesCourse = !courseFilter || row.courseId === courseFilter;
+    return matchesSearch && matchesCourse;
+  });
+
+  renderTable(filtered);
+}
+
+async function loadDashboard() {
+  const res = await fetch("/api/getAdminDashboard", { credentials: "include" });
   if (!res.ok) {
-    $('adminStatus').textContent = data.error || 'Unable to load admin report.';
-    return;
+    throw new Error("Failed to load admin dashboard");
   }
 
-  $('adminStatus').textContent = `Loaded ${data.metrics.quizTitle}.`;
-  renderMetrics(data.metrics);
-  renderUsers(data.users);
-  renderAttempts(data.attempts);
+  const data = await res.json();
+  rawRows = data.rows || [];
+  renderStats(data.summary || {
+    totalUsers: 0,
+    totalAttempts: 0,
+    passRate: 0,
+    averageScore: 0,
+    averageDurationSeconds: 0,
+    thirdFailCount: 0
+  });
+  renderTable(rawRows);
 }
 
-async function boot() {
-  $('loginBtn').addEventListener('click', () => {
-    window.location.href = '/.auth/login/aad';
-  });
-  $('logoutBtn').addEventListener('click', () => {
-    window.location.href = '/.auth/logout';
-  });
-  $('refreshBtn').addEventListener('click', loadAdminReport);
+function wireEvents() {
+  $("refreshBtn").addEventListener("click", loadDashboard);
+  $("searchInput").addEventListener("input", applyFilters);
+  $("courseFilter").addEventListener("change", applyFilters);
 
-  const user = await getAuthUser();
-  const signedIn = !!user;
-  setAuthUi(signedIn);
+  $("exportBtn").addEventListener("click", () => {
+    const rows = [
+      ["User", "Email", "Course", "Attempts", "Average Score", "Latest Score", "Best Score", "Passed", "Latest Duration Seconds", "Last Attempt", "Third Fail Alert"],
+      ...rawRows.map((row) => [
+        row.displayName,
+        row.email,
+        row.courseTitle,
+        row.attemptCount,
+        row.averageScore,
+        row.latestScore,
+        row.bestScore,
+        row.passed ? "Yes" : "No",
+        row.latestDurationSeconds || 0,
+        row.lastAttemptAt || "",
+        row.thirdFailNotified ? "Yes" : "No"
+      ])
+    ];
+    downloadCsv("unity-training-admin-report.csv", rows);
+  });
+}
 
-  if (!signedIn) {
-    $('adminStatus').textContent = 'Sign in first.';
-    return;
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    wireEvents();
+    await loadDashboard();
+  } catch (err) {
+    console.error(err);
+    alert("Could not load admin dashboard. Check your deployment, auth, and API settings.");
   }
-
-  await loadAdminReport();
-}
-
-boot();
+});
