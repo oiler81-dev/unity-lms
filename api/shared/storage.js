@@ -1,101 +1,83 @@
-const { attemptsClient, responsesClient, summaryClient, ensureTable } = require('./tableClient');
+const { TableClient, AzureNamedKeyCredential } = require("@azure/data-tables");
 
-const memory = {
-  attempts: [],
-  responses: [],
-  summaries: []
+const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME || "";
+const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY || "";
+
+const tableNames = {
+  attempts: "CourseAttempts",
+  summaries: "UserTrainingSummary"
 };
 
-async function setupTables() {
-  await Promise.all([
-    ensureTable(attemptsClient),
-    ensureTable(responsesClient),
-    ensureTable(summaryClient)
-  ]);
+function getClient(tableName) {
+  if (!accountName || !accountKey) {
+    throw new Error("AZURE_STORAGE_ACCOUNT_NAME and AZURE_STORAGE_ACCOUNT_KEY are required.");
+  }
+
+  const credential = new AzureNamedKeyCredential(accountName, accountKey);
+  const url = `https://${accountName}.table.core.windows.net`;
+  return new TableClient(url, tableName, credential);
 }
 
-async function listUserAttempts(quizId, userId) {
-  if (attemptsClient) {
-    await setupTables();
-    const results = [];
-    const filter = `PartitionKey eq '${quizId}' and userId eq '${userId}'`;
-    for await (const entity of attemptsClient.listEntities({ queryOptions: { filter } })) {
-      results.push(entity);
+async function ensureTables() {
+  for (const table of Object.values(tableNames)) {
+    const client = getClient(table);
+    try {
+      await client.createTable();
+    } catch (err) {
+      if (err.statusCode !== 409) {
+        throw err;
+      }
     }
-    return results.sort((a, b) => Number(a.attemptNumber) - Number(b.attemptNumber));
   }
-
-  return memory.attempts
-    .filter((a) => a.PartitionKey === quizId && a.userId === userId)
-    .sort((a, b) => Number(a.attemptNumber) - Number(b.attemptNumber));
 }
 
-async function saveAttempt(attempt) {
-  if (attemptsClient) {
-    await setupTables();
-    await attemptsClient.upsertEntity(attempt, 'Replace');
-    return attempt;
+async function listAttemptsForUserCourse(courseId, userId) {
+  const client = getClient(tableNames.attempts);
+  const filter = `PartitionKey eq '${courseId}' and userId eq '${userId}'`;
+  const rows = [];
+  for await (const entity of client.listEntities({ queryOptions: { filter } })) {
+    rows.push(entity);
   }
-  memory.attempts.push(attempt);
-  return attempt;
-}
-
-async function saveResponses(rows) {
-  if (responsesClient) {
-    await setupTables();
-    for (const row of rows) {
-      await responsesClient.upsertEntity(row, 'Replace');
-    }
-    return rows;
-  }
-  memory.responses.push(...rows);
+  rows.sort((a, b) => Number(a.attemptNumber || 0) - Number(b.attemptNumber || 0));
   return rows;
 }
 
-async function getSummary(quizId, userId) {
-  if (summaryClient) {
-    await setupTables();
-    try {
-      return await summaryClient.getEntity(quizId, userId);
-    } catch (err) {
-      if (err.statusCode === 404) return null;
-      throw err;
-    }
-  }
-  return memory.summaries.find((s) => s.PartitionKey === quizId && s.RowKey === userId) || null;
+async function saveAttempt(entity) {
+  const client = getClient(tableNames.attempts);
+  await client.upsertEntity(entity, "Merge");
 }
 
-async function saveSummary(summary) {
-  if (summaryClient) {
-    await setupTables();
-    await summaryClient.upsertEntity(summary, 'Replace');
-    return summary;
+async function getSummary(courseId, userId) {
+  const client = getClient(tableNames.summaries);
+  try {
+    return await client.getEntity(courseId, userId);
+  } catch (err) {
+    if (err.statusCode === 404) {
+      return null;
+    }
+    throw err;
   }
-
-  const idx = memory.summaries.findIndex((s) => s.PartitionKey === summary.PartitionKey && s.RowKey === summary.RowKey);
-  if (idx >= 0) memory.summaries[idx] = summary;
-  else memory.summaries.push(summary);
-  return summary;
 }
 
-async function getAllAttempts(quizId) {
-  if (attemptsClient) {
-    await setupTables();
-    const results = [];
-    const filter = `PartitionKey eq '${quizId}'`;
-    for await (const entity of attemptsClient.listEntities({ queryOptions: { filter } })) {
-      results.push(entity);
-    }
-    return results;
+async function saveSummary(entity) {
+  const client = getClient(tableNames.summaries);
+  await client.upsertEntity(entity, "Merge");
+}
+
+async function listAllSummaries() {
+  const client = getClient(tableNames.summaries);
+  const rows = [];
+  for await (const entity of client.listEntities()) {
+    rows.push(entity);
   }
-  return memory.attempts.filter((a) => a.PartitionKey === quizId);
+  return rows;
 }
 
 module.exports = {
-  listUserAttempts,
+  ensureTables,
+  listAttemptsForUserCourse,
   saveAttempt,
-  saveResponses,
   getSummary,
   saveSummary,
-  getAllAttempts
+  listAllSummaries
 };
