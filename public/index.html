@@ -2,14 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <title>Unity MSK | Front Desk Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unity MSK Training Portal</title>
   <meta
     name="description"
-    content="Unity MSK Front Desk Check-In Assessment"
+    content="Unity MSK training portal for quizzes, onboarding, and staff education."
   />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -17,122 +14,257 @@
   <div class="page-shell">
     <header class="site-header">
       <div class="container">
-        <a class="brand" href="index.html" aria-label="Unity MSK Home">
+        <a class="brand" href="index.html" aria-label="Unity MSK Training Portal">
           <img src="assets/unity_logo.png" alt="Unity MSK Logo" />
         </a>
 
         <nav class="nav" aria-label="Primary navigation">
-          <a href="#overview">Assessment</a>
-          <a href="#quizSection">Quiz</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#catalog">Courses</a>
+          <a href="#activeTraining">Current Training</a>
           <a href="#resultsSection">Results</a>
           <a href="admin.html">Admin</a>
         </nav>
       </div>
     </header>
 
-    <section class="hero" id="overview">
+    <section class="hero" id="dashboard">
       <div class="container">
         <div class="hero-content">
-          <h1>UNITY MSK Front Desk Check-In Assessment</h1>
+          <div class="eyebrow">Unity MSK Learning Portal</div>
+          <h1>Training, Assessments, and Team Readiness in One Place</h1>
           <p>
-            This assessment is designed to validate front desk check-in knowledge and reinforce
-            accurate patient intake workflows. A score of 90% or higher is required to pass.
-            If a passing score is not achieved, the assessment must be retaken.
+            This portal is built to support Unity MSK staff training at scale. Today it starts with the
+            Front Desk Check-In Assessment. Over time, additional trainings, quizzes, and role-based
+            learning paths can be added without rebuilding the platform.
           </p>
+
           <div class="hero-actions">
-            <a href="#quizSection" class="btn btn-primary">Start Assessment</a>
-            <a href="admin.html" class="btn btn-secondary">Open Admin Dashboard</a>
+            <a href="#activeTraining" class="btn btn-primary">Open Current Training</a>
+            <a href="#catalog" class="btn btn-secondary">View Course Catalog</a>
           </div>
         </div>
       </div>
     </section>
 
-    <main class="app-main" id="quizSection">
-      <section class="card quiz-shell">
-        <div class="quiz-header">
-          <div>
-            <div class="eyebrow">Unity MSK Training</div>
-            <h2>Front Desk Check-In Quiz</h2>
-            <p class="quiz-subtitle">
-              Sign in with your UnityMSK account. Your attempts, time spent, and scores are tracked.
+    <main class="app-main">
+      <section class="card portal-shell">
+        <section class="portal-top">
+          <div class="portal-title-wrap">
+            <div class="eyebrow">Staff Education</div>
+            <h2>Learning Dashboard</h2>
+            <p class="portal-subtitle">
+              Use this portal to complete required training, review your results, and retake assessments when needed.
             </p>
           </div>
 
-          <div class="user-panel">
+          <aside class="user-panel">
             <div class="user-row">
-              <span class="user-label">User</span>
+              <span class="user-label">Signed In User</span>
               <span id="userName" class="user-value">Not signed in</span>
             </div>
+
+            <div class="user-row compact">
+              <span class="user-label">Access</span>
+              <span class="user-value muted">UnityMSK Azure / Entra ID</span>
+            </div>
+
             <div class="user-actions">
               <button id="loginBtn" class="btn btn-secondary" type="button">Sign In</button>
               <button id="logoutBtn" class="btn btn-secondary hidden" type="button">Sign Out</button>
             </div>
-          </div>
-        </div>
+          </aside>
+        </section>
 
-        <div class="meta-row">
-          <div class="meta-chip">
-            <span class="label">Questions</span>
-            <span class="value" id="questionCount">20</span>
-          </div>
-          <div class="meta-chip">
-            <span class="label">Points Each</span>
-            <span class="value">5</span>
-          </div>
-          <div class="meta-chip">
-            <span class="label">Passing Score</span>
-            <span class="value">90%</span>
-          </div>
-          <div class="meta-chip">
-            <span class="label">Attempt</span>
-            <span class="value" id="attemptNumber">1</span>
-          </div>
-          <div class="meta-chip">
-            <span class="label">Timer</span>
-            <span class="value" id="timer">00:00</span>
-          </div>
-        </div>
+        <section class="dashboard-grid">
+          <article class="dashboard-card highlight">
+            <span class="card-label">Current Required Training</span>
+            <h3>Front Desk Check-In Assessment</h3>
+            <p>
+              Required pass threshold is 90% or higher. If a passing score is not achieved, the user must retake the assessment.
+            </p>
+            <div class="pill-row">
+              <span class="pill">20 Questions</span>
+              <span class="pill">5 Points Each</span>
+              <span class="pill">Pass at 90%</span>
+            </div>
+          </article>
 
-        <section id="introCard" class="section-block">
-          <div class="intro-grid">
-            <div class="intro-copy">
-              <h3>Before You Begin</h3>
+          <article class="dashboard-card">
+            <span class="card-label">Training Status</span>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Active Module</span>
+              <span class="mini-stat-value">Front Desk Check-In</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Attempt</span>
+              <span class="mini-stat-value" id="attemptNumber">1</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat-label">Timer</span>
+              <span class="mini-stat-value" id="timer">00:00</span>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <span class="card-label">Platform Direction</span>
+            <p>
+              This portal is structured to scale into multiple trainings, onboarding modules, quizzes,
+              policy acknowledgements, and future competency tracking.
+            </p>
+          </article>
+        </section>
+
+        <section class="catalog-section" id="catalog">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Course Catalog</div>
+              <h3>Available and Upcoming Trainings</h3>
+            </div>
+          </div>
+
+          <div class="catalog-grid">
+            <article class="course-card active-course">
+              <span class="course-status live">Live Now</span>
+              <h4>Front Desk Check-In Assessment</h4>
               <p>
-                Read each question carefully and choose the best answer. If you score below 90%,
-                you will be shown the correct answers for the questions you missed and prompted to retake the test.
+                Validates check-in knowledge, identity verification awareness, patient intake workflow, and front desk readiness.
               </p>
-              <ul class="info-list">
-                <li>20 questions total</li>
-                <li>5 points per question</li>
-                <li>90% or above required to pass</li>
-                <li>Questions reorder on retake</li>
-                <li>Third failed attempt triggers admin notification</li>
-              </ul>
-            </div>
+              <div class="course-meta">
+                <span>Quiz</span>
+                <span>Required</span>
+                <span>Scored</span>
+              </div>
+              <a href="#activeTraining" class="btn btn-primary">Launch</a>
+            </article>
 
-            <div class="intro-panel">
-              <div class="stat-panel">
-                <span class="stat-label">Assessment Type</span>
-                <span class="stat-value">Front Desk</span>
+            <article class="course-card">
+              <span class="course-status upcoming">Planned</span>
+              <h4>Copay and Collections Training</h4>
+              <p>
+                Future module for front desk and collections workflows, including copay capture and balance handling.
+              </p>
+              <div class="course-meta">
+                <span>Training</span>
+                <span>Upcoming</span>
+                <span>Role Based</span>
               </div>
-              <div class="stat-panel">
-                <span class="stat-label">Tracking</span>
-                <span class="stat-value">Attempts, Scores, Duration</span>
+              <button class="btn btn-secondary" type="button" disabled>Coming Soon</button>
+            </article>
+
+            <article class="course-card">
+              <span class="course-status upcoming">Planned</span>
+              <h4>HIPAA and Compliance Review</h4>
+              <p>
+                Future compliance content for required review, acknowledgement, and recurring knowledge checks.
+              </p>
+              <div class="course-meta">
+                <span>Compliance</span>
+                <span>Upcoming</span>
+                <span>Annual</span>
               </div>
-              <div class="stat-panel">
-                <span class="stat-label">Authentication</span>
-                <span class="stat-value">Azure / Entra ID</span>
+              <button class="btn btn-secondary" type="button" disabled>Coming Soon</button>
+            </article>
+
+            <article class="course-card">
+              <span class="course-status upcoming">Planned</span>
+              <h4>Scheduling and Call Flow Training</h4>
+              <p>
+                Future training for phone handling, scheduling best practices, and patient communication standards.
+              </p>
+              <div class="course-meta">
+                <span>Operations</span>
+                <span>Upcoming</span>
+                <span>Staff Ready</span>
               </div>
-              <button id="startBtn" class="btn btn-primary start-btn" type="button">
-                Begin Quiz
-              </button>
-            </div>
+              <button class="btn btn-secondary" type="button" disabled>Coming Soon</button>
+            </article>
           </div>
         </section>
 
-        <form id="quizForm" class="hidden" novalidate></form>
+        <section class="training-section" id="activeTraining">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Current Training</div>
+              <h3>Front Desk Check-In Assessment</h3>
+              <p class="section-copy">
+                This module is the first active assessment in the Unity MSK training portal.
+              </p>
+            </div>
+          </div>
 
-        <section id="resultsSection" class="hidden">
+          <div class="meta-row">
+            <div class="meta-chip">
+              <span class="label">Questions</span>
+              <span class="value" id="questionCount">20</span>
+            </div>
+            <div class="meta-chip">
+              <span class="label">Points Each</span>
+              <span class="value">5</span>
+            </div>
+            <div class="meta-chip">
+              <span class="label">Passing Score</span>
+              <span class="value">90%</span>
+            </div>
+            <div class="meta-chip">
+              <span class="label">Retake Logic</span>
+              <span class="value">Shuffle on Retry</span>
+            </div>
+            <div class="meta-chip">
+              <span class="label">Escalation</span>
+              <span class="value">3rd Failed Attempt</span>
+            </div>
+          </div>
+
+          <section id="introCard" class="section-block">
+            <div class="intro-grid">
+              <div class="intro-copy">
+                <h3>Assessment Instructions</h3>
+                <p>
+                  Answer each question carefully. If you score below 90%, the portal will reveal the correct answers for missed questions and prompt you to retake the quiz. On retake, the questions should be reordered.
+                </p>
+
+                <ul class="info-list">
+                  <li>Passing score is 90% or higher</li>
+                  <li>Each question is worth 5 points</li>
+                  <li>20 questions total</li>
+                  <li>Incorrect answers are reviewed after a failed submission</li>
+                  <li>Third failed attempt triggers notification to admin</li>
+                </ul>
+              </div>
+
+              <div class="intro-panel">
+                <div class="stat-panel">
+                  <span class="stat-label">Module Type</span>
+                  <span class="stat-value">Assessment</span>
+                </div>
+                <div class="stat-panel">
+                  <span class="stat-label">Tracking</span>
+                  <span class="stat-value">Attempts, Scores, Duration, Average</span>
+                </div>
+                <div class="stat-panel">
+                  <span class="stat-label">Scalable Design</span>
+                  <span class="stat-value">Ready for additional courses and training paths</span>
+                </div>
+
+                <button id="startBtn" class="btn btn-primary start-btn" type="button">
+                  Begin Assessment
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <form id="quizForm" class="hidden" novalidate></form>
+        </section>
+
+        <section id="resultsSection" class="results-section hidden">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Results</div>
+              <h3>Assessment Outcome</h3>
+            </div>
+          </div>
+
           <div id="resultCard" class="result-card"></div>
         </section>
       </section>
