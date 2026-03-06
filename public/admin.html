@@ -1,103 +1,105 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Unity MSK Quiz Admin</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unity MSK Training Admin</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html" aria-label="Unity MSK Training Portal">
+          <img src="assets/unity_logo.png" alt="Unity MSK Logo" />
+        </a>
 
-  <header class="shell topbar">
-    <a class="brand" href="./index.html">
-      <img src="assets/unitymsk-logo.svg" alt="Unity MSK logo" class="brand-logo">
-      <div>
-        <div class="eyebrow">Admin Reporting</div>
-        <h1>Unity MSK Quiz Dashboard</h1>
+        <nav class="nav">
+          <a href="index.html">Dashboard</a>
+          <a href="index.html#catalog">Courses</a>
+          <a href="index.html#activeTraining">Current Training</a>
+          <a href="admin.html">Admin</a>
+        </nav>
       </div>
-    </a>
+    </header>
 
-    <div class="top-actions">
-      <a class="link-btn" href="index.html">Quiz</a>
-      <button id="loginBtn" class="btn btn-primary">Sign in</button>
-      <button id="logoutBtn" class="btn btn-secondary" hidden>Sign out</button>
-    </div>
-  </header>
-
-  <main class="shell dashboard-layout">
-    <section class="card span-3">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">Secure reporting</div>
-          <h2>Attempt tracking</h2>
+    <section class="hero admin-hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="eyebrow">Training Administration</div>
+          <h1>Admin Dashboard</h1>
+          <p>Track attempts, pass rate, averages, time spent, and users who need attention.</p>
         </div>
-        <button id="refreshBtn" class="btn btn-secondary">Refresh</button>
-      </div>
-      <div id="adminStatus" class="callout">Sign in with an authorized admin account to load reporting.</div>
-    </section>
-
-    <section class="metric card"><h3>Total users</h3><div id="mUsers" class="metric-value">—</div></section>
-    <section class="metric card"><h3>Total attempts</h3><div id="mAttempts" class="metric-value">—</div></section>
-    <section class="metric card"><h3>Pass rate</h3><div id="mPassRate" class="metric-value">—</div></section>
-    <section class="metric card"><h3>Avg score</h3><div id="mAvgScore" class="metric-value">—</div></section>
-    <section class="metric card"><h3>Avg attempts</h3><div id="mAvgAttempts" class="metric-value">—</div></section>
-    <section class="metric card"><h3>Avg duration</h3><div id="mAvgDuration" class="metric-value">—</div></section>
-
-    <section class="card span-3">
-      <div class="section-head">
-        <div>
-          <h3>User summary</h3>
-          <p class="small-note">Latest status, averages, best score, and repeat-fail visibility.</p>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table" id="usersTable">
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Attempts</th>
-              <th>Average</th>
-              <th>Latest</th>
-              <th>Best</th>
-              <th>Passed</th>
-              <th>Duration</th>
-              <th>Alert</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
       </div>
     </section>
 
-    <section class="card span-3">
-      <div class="section-head">
-        <div>
-          <h3>Attempt log</h3>
-          <p class="small-note">Each quiz submission with timing and score.</p>
+    <main class="app-main">
+      <section class="card portal-shell">
+        <div class="admin-toolbar">
+          <div class="toolbar-group">
+            <input id="searchInput" type="text" placeholder="Search by user or email" />
+            <select id="courseFilter">
+              <option value="">All Courses</option>
+              <option value="front-desk-checkin-v1">Front Desk Check-In Assessment</option>
+            </select>
+          </div>
+
+          <div class="toolbar-group">
+            <button id="refreshBtn" class="btn btn-secondary" type="button">Refresh</button>
+            <button id="exportBtn" class="btn btn-primary" type="button">Export CSV</button>
+          </div>
         </div>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table" id="attemptsTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>User</th>
-              <th>Email</th>
-              <th>Attempt</th>
-              <th>Score</th>
-              <th>Passed</th>
-              <th>Duration</th>
-              <th>Shuffled</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+
+        <section class="dashboard-grid admin-stats" id="adminStats">
+          <article class="dashboard-card">
+            <span class="card-label">Users</span>
+            <h3 id="totalUsers">0</h3>
+          </article>
+          <article class="dashboard-card">
+            <span class="card-label">Attempts</span>
+            <h3 id="totalAttempts">0</h3>
+          </article>
+          <article class="dashboard-card">
+            <span class="card-label">Pass Rate</span>
+            <h3 id="passRate">0%</h3>
+          </article>
+          <article class="dashboard-card">
+            <span class="card-label">Average Score</span>
+            <h3 id="averageScore">0%</h3>
+          </article>
+          <article class="dashboard-card">
+            <span class="card-label">Average Time</span>
+            <h3 id="averageTime">0m</h3>
+          </article>
+          <article class="dashboard-card">
+            <span class="card-label">3rd Fail Alerts</span>
+            <h3 id="thirdFailCount">0</h3>
+          </article>
+        </section>
+
+        <div class="table-wrap">
+          <table id="adminTable">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Attempts</th>
+                <th>Average Score</th>
+                <th>Latest Score</th>
+                <th>Best Score</th>
+                <th>Passed</th>
+                <th>Latest Duration</th>
+                <th>Last Attempt</th>
+                <th>3rd Fail Alert</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="admin.js"></script>
 </body>
