@@ -1,25 +1,30 @@
-function decodeBase64Json(raw) {
-  if (!raw) return null;
+function getClientPrincipal(req) {
+  const encoded = req.headers["x-ms-client-principal"];
+  if (!encoded) return null;
+
   try {
-    return JSON.parse(Buffer.from(raw, 'base64').toString('utf8'));
+    const decoded = JSON.parse(Buffer.from(encoded, "base64").toString("utf8"));
+    return decoded;
   } catch {
     return null;
   }
 }
 
-function getUser(req) {
-  const principal = decodeBase64Json(req.headers['x-ms-client-principal']);
-  const roles = Array.isArray(principal?.userRoles) ? principal.userRoles : [];
+function getUserFromRequest(req) {
+  const principal = getClientPrincipal(req);
+  if (!principal) {
+    return null;
+  }
 
   return {
-    isAuthenticated: !!principal,
-    userId: principal?.userId || null,
-    displayName: principal?.userDetails || req.headers['x-ms-client-principal-name'] || 'Unknown User',
-    email: principal?.userDetails || req.headers['x-ms-client-principal-name'] || null,
-    identityProvider: principal?.identityProvider || null,
-    roles,
-    isAdmin: roles.includes('admin') || roles.includes('authenticated') && (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean).includes((principal?.userDetails || '').toLowerCase())
+    userId: principal.userId,
+    displayName: principal.userDetails || principal.identityProvider || "Authenticated User",
+    email: principal.userDetails || "",
+    roles: Array.isArray(principal.userRoles) ? principal.userRoles : []
   };
 }
 
-module.exports = { getUser };
+module.exports = {
+  getClientPrincipal,
+  getUserFromRequest
+};
