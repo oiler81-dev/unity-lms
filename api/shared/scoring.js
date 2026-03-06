@@ -1,32 +1,36 @@
-function scoreQuiz(questions, answers, pointsPerQuestion = 5) {
-  let earned = 0;
+function scoreCourse(course, answers) {
   const results = [];
+  let earned = 0;
 
-  for (const question of questions) {
-    const selectedAnswer = answers?.[question.id] ?? null;
-    const isCorrect = selectedAnswer === question.correctAnswer;
-    if (isCorrect) earned += pointsPerQuestion;
+  for (const q of course.questions) {
+    const selected = answers[q.id] ?? null;
+    const isCorrect = selected === q.correctAnswer;
+
+    if (isCorrect) {
+      earned += course.pointsPerQuestion;
+    }
 
     results.push({
-      questionId: question.id,
-      selectedAnswer,
-      correctAnswer: question.correctAnswer,
+      questionId: q.id,
+      selectedAnswer: selected,
+      correctAnswer: q.correctAnswer,
       isCorrect,
-      explanation: question.explanation || ''
+      explanation: q.explanation || ""
     });
   }
 
-  const total = questions.length * pointsPerQuestion;
-  const score = Math.round((earned / total) * 100);
+  const totalPoints = course.questions.length * course.pointsPerQuestion;
+  const score = Math.round((earned / totalPoints) * 100);
+  const passed = score >= course.passScore;
 
   return {
-    earned,
-    total,
     score,
-    passed: score >= 90,
+    passed,
+    earned,
+    totalPoints,
     results,
     incorrect: results.filter((r) => !r.isCorrect)
   };
 }
 
-module.exports = { scoreQuiz };
+module.exports = { scoreCourse };
