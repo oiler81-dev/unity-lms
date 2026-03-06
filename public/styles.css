@@ -1,19 +1,30 @@
 :root{
   --unity-navy: #02264a;
   --unity-navy-deep: #011b35;
-  --unity-navy-overlay: rgba(2, 32, 64, 0.72);
-  --unity-navy-overlay-strong: rgba(1, 21, 42, 0.82);
-  --unity-gold: #f2be1a;
-  --unity-white: #ffffff;
-  --unity-text-soft: rgba(255,255,255,0.88);
-  --unity-text-muted: rgba(255,255,255,0.72);
-  --unity-border: rgba(255,255,255,0.08);
-  --unity-card: rgba(255,255,255,0.06);
-  --unity-shadow: 0 20px 50px rgba(0,0,0,0.28);
+  --unity-navy-darker: #00162c;
+  --unity-navy-overlay: rgba(2, 32, 64, 0.74);
+  --unity-navy-overlay-strong: rgba(1, 21, 42, 0.84);
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --unity-gold: #f2be1a;
+  --unity-gold-soft: rgba(242, 190, 26, 0.18);
+
+  --unity-white: #ffffff;
+  --unity-text-soft: rgba(255,255,255,0.9);
+  --unity-text-muted: rgba(255,255,255,0.7);
+  --unity-border: rgba(255,255,255,0.08);
+  --unity-card: rgba(255,255,255,0.05);
+
+  --success: #1fc979;
+  --success-soft: rgba(31, 201, 121, 0.12);
+  --danger: #ff7a7a;
+  --danger-soft: rgba(255, 122, 122, 0.12);
+
+  --shadow-lg: 0 20px 50px rgba(0,0,0,0.28);
+  --shadow-md: 0 12px 30px rgba(0,0,0,0.2);
+
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
 
   --container: 1280px;
   --nav-height: 92px;
@@ -34,12 +45,31 @@ body{
   font-family: var(--font-stack);
   color: var(--unity-white);
   background:
-    linear-gradient(180deg, #021c38 0%, #03294d 100%);
+    linear-gradient(180deg, #02172f 0%, #03294d 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* ========== LAYOUT ========== */
+a{
+  color: inherit;
+}
+
+img{
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea{
+  font: inherit;
+}
+
+.hidden{
+  display: none !important;
+}
+
 .container{
   width: min(calc(100% - 40px), var(--container));
   margin: 0 auto;
@@ -51,13 +81,15 @@ body{
   flex-direction: column;
 }
 
-/* ========== TOP NAV ========== */
+/* =========================
+   HEADER
+   ========================= */
 .site-header{
   position: sticky;
   top: 0;
   z-index: 1000;
   height: var(--nav-height);
-  background: rgba(2, 26, 51, 0.96);
+  background: rgba(2, 26, 51, 0.97);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
@@ -71,75 +103,42 @@ body{
 }
 
 .brand{
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
   text-decoration: none;
-  color: var(--unity-white);
 }
 
 .brand img{
-  height: 66px;
+  height: 64px;
   width: auto;
-  display: block;
-}
-
-.brand-wordmark{
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.brand-wordmark .name{
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.brand-wordmark .name .gold{
-  color: var(--unity-gold);
-}
-
-.brand-wordmark .tag{
-  margin-top: 4px;
-  font-size: 0.66rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--unity-white);
-  opacity: 0.92;
+  object-fit: contain;
 }
 
 .nav{
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 34px;
   flex-wrap: wrap;
 }
 
 .nav a{
-  color: var(--unity-white);
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 0.01em;
+  font-weight: 800;
+  font-size: 0.98rem;
   text-transform: uppercase;
+  color: var(--unity-white);
+  letter-spacing: 0.01em;
   transition: color .18s ease, opacity .18s ease;
 }
 
 .nav a:hover,
 .nav a:focus{
   color: var(--unity-gold);
-  opacity: 1;
 }
 
-.nav .icon-link{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ========== HERO ========== */
+/* =========================
+   HERO
+   ========================= */
 .hero{
   position: relative;
   min-height: calc(100vh - var(--nav-height));
@@ -149,7 +148,8 @@ body{
   background:
     linear-gradient(0deg, var(--unity-navy-overlay), var(--unity-navy-overlay)),
     linear-gradient(90deg, var(--unity-navy-overlay-strong) 0%, rgba(2,32,64,0.56) 50%, rgba(2,32,64,0.66) 100%),
-    url("assets/hero-bg.jpg") center center / cover no-repeat;
+    url("assets/unity_logo.png") center center / 24% no-repeat,
+    linear-gradient(180deg, #03294d 0%, #021c38 100%);
 }
 
 .hero::before{
@@ -158,14 +158,14 @@ body{
   inset: 0;
   background:
     radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 48%),
-    linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18));
+    linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.18));
   pointer-events: none;
 }
 
 .hero .container{
   position: relative;
   z-index: 1;
-  padding: 90px 0 100px;
+  padding: 90px 0 110px;
   display: flex;
   justify-content: center;
 }
@@ -177,71 +177,134 @@ body{
 
 .hero h1{
   margin: 0;
-  font-size: clamp(3rem, 6vw, 6.15rem);
-  line-height: 0.95;
+  font-size: clamp(2.9rem, 5.6vw, 5.8rem);
+  line-height: 0.96;
   font-weight: 300;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   color: var(--unity-white);
 }
 
 .hero p{
-  max-width: 1080px;
+  max-width: 1040px;
   margin: 34px auto 0;
-  font-size: clamp(1.18rem, 1.7vw, 1.55rem);
+  font-size: clamp(1.08rem, 1.55vw, 1.45rem);
   line-height: 1.8;
   color: var(--unity-text-soft);
-  font-weight: 400;
 }
 
-/* ========== QUIZ APP CARDS ========== */
+.hero-actions{
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+
+/* =========================
+   APP SHELL
+   ========================= */
 .app-main{
   position: relative;
   z-index: 2;
-  margin-top: -72px;
-  padding-bottom: 48px;
+  margin-top: -76px;
+  padding-bottom: 60px;
 }
 
 .card{
   background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
   border: 1px solid var(--unity-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--unity-shadow);
+  box-shadow: var(--shadow-lg);
   backdrop-filter: blur(8px);
   color: var(--unity-white);
 }
 
 .quiz-shell{
-  width: min(calc(100% - 40px), 1100px);
+  width: min(calc(100% - 40px), 1120px);
   margin: 0 auto;
   padding: 28px;
+}
+
+.section-block{
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 24px;
+}
+
+.eyebrow{
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--unity-gold);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .quiz-header{
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 18px;
+  align-items: flex-start;
+  gap: 20px;
   margin-bottom: 24px;
 }
 
 .quiz-header h2{
   margin: 0;
-  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-size: clamp(1.6rem, 2vw, 2.1rem);
   font-weight: 800;
   color: var(--unity-white);
 }
 
 .quiz-subtitle{
-  margin: 6px 0 0;
+  margin: 8px 0 0;
+  font-size: 1rem;
   color: var(--unity-text-muted);
-  font-size: 0.98rem;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.user-panel{
+  min-width: 240px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.user-row{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.user-label{
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--unity-text-muted);
+}
+
+.user-value{
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--unity-white);
+  word-break: break-word;
+}
+
+.user-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .meta-row{
   display: grid;
   grid-template-columns: repeat(5, minmax(120px, 1fr));
   gap: 14px;
-  margin: 20px 0 28px;
+  margin: 18px 0 26px;
 }
 
 .meta-chip{
@@ -266,7 +329,74 @@ body{
   color: var(--unity-white);
 }
 
-/* ========== QUESTIONS ========== */
+.intro-grid{
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.intro-copy h3{
+  margin: 0 0 12px;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.intro-copy p{
+  margin: 0;
+  color: var(--unity-text-soft);
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.info-list{
+  margin: 18px 0 0;
+  padding-left: 20px;
+  color: var(--unity-text-soft);
+  line-height: 1.8;
+}
+
+.intro-panel{
+  display: grid;
+  gap: 14px;
+}
+
+.stat-panel{
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.stat-label{
+  display: block;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--unity-text-muted);
+  margin-bottom: 8px;
+}
+
+.stat-value{
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--unity-white);
+  line-height: 1.4;
+}
+
+.start-btn{
+  margin-top: 6px;
+  width: 100%;
+}
+
+/* =========================
+   FORM / QUESTIONS
+   ========================= */
+#quizForm{
+  margin-top: 24px;
+}
+
 .question{
   padding: 22px;
   margin-bottom: 18px;
@@ -277,8 +407,8 @@ body{
 
 .question h3{
   margin: 0 0 16px;
-  font-size: 1.08rem;
-  line-height: 1.45;
+  font-size: 1.06rem;
+  line-height: 1.5;
   font-weight: 700;
   color: var(--unity-white);
 }
@@ -309,15 +439,24 @@ body{
 .option input[type="radio"]{
   margin-top: 3px;
   accent-color: var(--unity-gold);
-  transform: scale(1.15);
+  transform: scale(1.1);
 }
 
 .option span{
   color: var(--unity-text-soft);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-/* ========== BUTTONS ========== */
+.form-actions{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
 .btn,
 button{
   appearance: none;
@@ -327,7 +466,19 @@ button{
   border-radius: 999px;
   font-family: inherit;
   font-weight: 800;
-  transition: transform .16s ease, box-shadow .16s ease, background .16s ease, color .16s ease;
+  transition:
+    transform .16s ease,
+    box-shadow .16s ease,
+    background .16s ease,
+    color .16s ease,
+    border-color .16s ease;
+}
+
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .btn-primary{
@@ -339,7 +490,7 @@ button{
 
 .btn-primary:hover{
   transform: translateY(-1px);
-  box-shadow: 0 16px 32px rgba(242,190,26,0.28);
+  box-shadow: 0 16px 32px rgba(242,190,26,0.3);
 }
 
 .btn-secondary{
@@ -355,16 +506,14 @@ button{
   color: var(--unity-gold);
 }
 
-.actions{
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+/* =========================
+   RESULTS
+   ========================= */
+#resultsSection{
   margin-top: 24px;
 }
 
-/* ========== RESULTS ========== */
 .result-card{
-  margin-top: 20px;
   padding: 24px;
   border-radius: var(--radius-md);
   background: rgba(255,255,255,0.05);
@@ -372,25 +521,32 @@ button{
 }
 
 .result-card.pass{
-  border-color: rgba(46, 204, 113, 0.38);
-  background: rgba(46, 204, 113, 0.08);
+  border-color: rgba(31, 201, 121, 0.45);
+  background: var(--success-soft);
 }
 
 .result-card.fail{
-  border-color: rgba(255, 99, 99, 0.28);
-  background: rgba(255, 99, 99, 0.08);
+  border-color: rgba(255, 122, 122, 0.35);
+  background: var(--danger-soft);
 }
 
 .result-card h3{
   margin: 0 0 12px;
   font-size: 1.5rem;
+  color: var(--unity-white);
+}
+
+.result-card p{
+  margin: 0 0 10px;
+  color: var(--unity-text-soft);
+  line-height: 1.7;
 }
 
 .result-grid{
   display: grid;
   grid-template-columns: repeat(4, minmax(140px, 1fr));
   gap: 14px;
-  margin: 18px 0 20px;
+  margin: 20px 0;
 }
 
 .result-stat{
@@ -410,27 +566,36 @@ button{
 }
 
 .result-stat .value{
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--unity-white);
 }
 
 .review-list{
-  margin: 16px 0 0;
+  margin: 18px 0 0;
   padding-left: 20px;
 }
 
 .review-list li{
   margin-bottom: 14px;
   color: var(--unity-text-soft);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .review-list strong{
   color: var(--unity-white);
 }
 
-/* ========== ADMIN TABLE ========== */
+.result-actions{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+/* =========================
+   ADMIN SUPPORT STYLES
+   ========================= */
 .admin-toolbar{
   display: flex;
   justify-content: space-between;
@@ -447,7 +612,6 @@ button{
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.06);
   color: var(--unity-white);
-  font-family: inherit;
 }
 
 .table-wrap{
@@ -486,36 +650,9 @@ tbody tr:hover{
   background: rgba(255,255,255,0.045);
 }
 
-/* ========== FORM ELEMENTS ========== */
-input,
-select,
-textarea{
-  font: inherit;
-}
-
-input::placeholder,
-textarea::placeholder{
-  color: rgba(255,255,255,0.48);
-}
-
-/* ========== UTILITIES ========== */
-.text-gold{
-  color: var(--unity-gold);
-}
-
-.text-muted{
-  color: var(--unity-text-muted);
-}
-
-.center{
-  text-align: center;
-}
-
-.hidden{
-  display: none !important;
-}
-
-/* ========== MOBILE ========== */
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 1180px){
   .nav{
     gap: 22px;
@@ -527,7 +664,7 @@ textarea::placeholder{
   }
 }
 
-@media (max-width: 900px){
+@media (max-width: 980px){
   .site-header{
     height: auto;
     padding: 14px 0;
@@ -539,40 +676,36 @@ textarea::placeholder{
     gap: 16px;
   }
 
-  .nav{
-    gap: 16px 22px;
-  }
-
   .hero{
     min-height: auto;
-    padding-top: 36px;
   }
 
   .hero .container{
-    padding: 64px 0 80px;
+    padding: 70px 0 86px;
   }
 
-  .hero h1{
-    font-size: clamp(2.6rem, 9vw, 4.4rem);
-    line-height: 1.02;
+  .quiz-header{
+    flex-direction: column;
   }
 
-  .hero p{
-    font-size: 1.02rem;
-    line-height: 1.7;
+  .user-panel{
+    width: 100%;
   }
 
-  .meta-row,
-  .result-grid{
+  .meta-row{
     grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
 
-  .quiz-shell{
-    padding: 20px;
+  .intro-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .result-grid{
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
   }
 }
 
-@media (max-width: 640px){
+@media (max-width: 700px){
   .container{
     width: min(calc(100% - 24px), var(--container));
   }
@@ -581,26 +714,36 @@ textarea::placeholder{
     height: 54px;
   }
 
-  .brand-wordmark .name{
-    font-size: 1.5rem;
+  .nav{
+    gap: 14px 18px;
   }
 
   .nav a{
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .hero .container{
-    padding: 52px 0 64px;
+    padding: 56px 0 74px;
   }
 
   .hero h1{
-    font-size: 2.45rem;
-    letter-spacing: -0.04em;
+    font-size: clamp(2.35rem, 9vw, 3.8rem);
+    line-height: 1.02;
   }
 
   .hero p{
-    margin-top: 24px;
+    margin-top: 22px;
     font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .quiz-shell{
+    width: min(calc(100% - 24px), 1120px);
+    padding: 18px;
+  }
+
+  .section-block{
+    padding: 18px;
   }
 
   .meta-row,
@@ -616,10 +759,14 @@ textarea::placeholder{
     padding: 12px 14px;
   }
 
-  .actions{
+  .hero-actions,
+  .form-actions,
+  .result-actions,
+  .user-actions{
     flex-direction: column;
   }
 
+  .btn,
   .btn-primary,
   .btn-secondary,
   button{
