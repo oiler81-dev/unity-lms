@@ -2,8 +2,8 @@
   --unity-navy: #02264a;
   --unity-navy-deep: #011b35;
   --unity-navy-darker: #00162c;
-  --unity-navy-overlay: rgba(2, 32, 64, 0.74);
-  --unity-navy-overlay-strong: rgba(1, 21, 42, 0.84);
+  --unity-navy-overlay: rgba(2, 32, 64, 0.88);
+  --unity-navy-overlay-strong: rgba(1, 21, 42, 0.94);
 
   --unity-gold: #f2be1a;
   --unity-gold-soft: rgba(242, 190, 26, 0.18);
@@ -45,7 +45,7 @@ body{
   font-family: var(--font-stack);
   color: var(--unity-white);
   background:
-    linear-gradient(180deg, #02172f 0%, #03294d 100%);
+    linear-gradient(180deg, #02172f 0%, #03294d 52%, #021c38 100%);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -137,19 +137,16 @@ textarea{
 }
 
 /* =========================
-   HERO
+   HERO / CLEAN HEADER BAND
    ========================= */
 .hero{
   position: relative;
-  min-height: calc(100vh - var(--nav-height));
   display: flex;
   align-items: center;
   overflow: hidden;
   background:
-    linear-gradient(0deg, var(--unity-navy-overlay), var(--unity-navy-overlay)),
-    linear-gradient(90deg, var(--unity-navy-overlay-strong) 0%, rgba(2,32,64,0.56) 50%, rgba(2,32,64,0.66) 100%),
-    url("assets/unity_logo.png") center center / 24% no-repeat,
-    linear-gradient(180deg, #03294d 0%, #021c38 100%);
+    linear-gradient(180deg, var(--unity-navy-overlay-strong) 0%, var(--unity-navy-overlay) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .hero::before{
@@ -157,38 +154,38 @@ textarea{
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 48%),
-    linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.18));
+    radial-gradient(circle at top center, rgba(242,190,26,0.08), transparent 28%),
+    radial-gradient(circle at center, rgba(255,255,255,0.025), transparent 44%);
   pointer-events: none;
 }
 
 .hero .container{
   position: relative;
   z-index: 1;
-  padding: 90px 0 110px;
+  padding: 74px 0 82px;
   display: flex;
   justify-content: center;
 }
 
 .hero-content{
-  max-width: 1100px;
+  max-width: 1080px;
   text-align: center;
 }
 
 .hero h1{
   margin: 0;
-  font-size: clamp(2.9rem, 5.6vw, 5.8rem);
-  line-height: 0.96;
+  font-size: clamp(2.7rem, 5.2vw, 5.25rem);
+  line-height: 0.98;
   font-weight: 300;
   letter-spacing: -0.035em;
   color: var(--unity-white);
 }
 
 .hero p{
-  max-width: 1040px;
-  margin: 34px auto 0;
-  font-size: clamp(1.08rem, 1.55vw, 1.45rem);
-  line-height: 1.8;
+  max-width: 980px;
+  margin: 28px auto 0;
+  font-size: clamp(1.04rem, 1.4vw, 1.28rem);
+  line-height: 1.85;
   color: var(--unity-text-soft);
 }
 
@@ -197,7 +194,7 @@ textarea{
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 34px;
+  margin-top: 30px;
 }
 
 /* =========================
@@ -206,7 +203,7 @@ textarea{
 .app-main{
   position: relative;
   z-index: 2;
-  margin-top: -76px;
+  margin-top: -38px;
   padding-bottom: 60px;
 }
 
@@ -676,12 +673,8 @@ tbody tr:hover{
     gap: 16px;
   }
 
-  .hero{
-    min-height: auto;
-  }
-
   .hero .container{
-    padding: 70px 0 86px;
+    padding: 60px 0 70px;
   }
 
   .quiz-header{
@@ -723,16 +716,16 @@ tbody tr:hover{
   }
 
   .hero .container{
-    padding: 56px 0 74px;
+    padding: 48px 0 60px;
   }
 
   .hero h1{
-    font-size: clamp(2.35rem, 9vw, 3.8rem);
+    font-size: clamp(2.3rem, 9vw, 3.8rem);
     line-height: 1.02;
   }
 
   .hero p{
-    margin-top: 22px;
+    margin-top: 20px;
     font-size: 0.98rem;
     line-height: 1.7;
   }
