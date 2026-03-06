@@ -1,71 +1,143 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Unity MSK Quiz Portal</title>
-  <meta name="description" content="Unity MSK training assessment portal for front desk check-in workflows.">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>Unity MSK | Front Desk Quiz</title>
+  <meta
+    name="description"
+    content="Unity MSK Front Desk Check-In Assessment"
+  />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html" aria-label="Unity MSK Home">
+          <img src="assets/unity_logo.png" alt="Unity MSK Logo" />
+        </a>
 
-  <header class="shell topbar">
-    <a class="brand" href="./">
-      <img src="assets/unitymsk-logo.svg" alt="Unity MSK logo" class="brand-logo">
-      <div>
-        <div class="eyebrow">Training Portal</div>
-        <h1>Unity MSK Quiz Center</h1>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="#overview">Assessment</a>
+          <a href="#quizSection">Quiz</a>
+          <a href="#resultsSection">Results</a>
+          <a href="admin.html">Admin</a>
+        </nav>
       </div>
-    </a>
+    </header>
 
-    <div class="top-actions">
-      <a class="link-btn" href="admin.html">Admin</a>
-      <button id="loginBtn" class="btn btn-primary">Sign in</button>
-      <button id="logoutBtn" class="btn btn-secondary" hidden>Sign out</button>
-    </div>
-  </header>
-
-  <main class="shell main-grid">
-    <section class="hero card">
-      <div class="eyebrow">UNITY MSK</div>
-      <h2 id="quizTitle">Front Desk Check-In Assessment</h2>
-      <p class="lede">Passing score is 90% or higher. There are 20 questions worth 5 points each. If you score below 90, the correct answers are shown and you must retake the assessment.</p>
-      <div class="pill-row">
-        <span class="pill"><strong>Questions</strong><span id="questionCount">20</span></span>
-        <span class="pill"><strong>Points each</strong><span>5</span></span>
-        <span class="pill"><strong>Passing</strong><span>90%</span></span>
-        <span class="pill"><strong>Attempt</strong><span id="attemptNumber">1</span></span>
+    <section class="hero" id="overview">
+      <div class="container">
+        <div class="hero-content">
+          <h1>UNITY MSK Front Desk Check-In Assessment</h1>
+          <p>
+            This assessment is designed to validate front desk check-in knowledge and reinforce
+            accurate patient intake workflows. A score of 90% or higher is required to pass.
+            If a passing score is not achieved, the assessment must be retaken.
+          </p>
+          <div class="hero-actions">
+            <a href="#quizSection" class="btn btn-primary">Start Assessment</a>
+            <a href="admin.html" class="btn btn-secondary">Open Admin Dashboard</a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <aside class="status-panel card">
-      <h3>Session</h3>
-      <dl class="meta-list">
-        <div><dt>User</dt><dd id="userName">Not signed in</dd></div>
-        <div><dt>Email</dt><dd id="userEmail">—</dd></div>
-        <div><dt>Timer</dt><dd id="timer">00:00</dd></div>
-        <div><dt>Status</dt><dd id="sessionStatus">Waiting to start</dd></div>
-      </dl>
-      <button id="startBtn" class="btn btn-primary btn-block" disabled>Sign in to start</button>
-      <p class="small-note">Azure sign-in is required. Admin reporting uses the same authenticated session.</p>
-    </aside>
+    <main class="app-main" id="quizSection">
+      <section class="card quiz-shell">
+        <div class="quiz-header">
+          <div>
+            <div class="eyebrow">Unity MSK Training</div>
+            <h2>Front Desk Check-In Quiz</h2>
+            <p class="quiz-subtitle">
+              Sign in with your UnityMSK account. Your attempts, time spent, and scores are tracked.
+            </p>
+          </div>
 
-    <section id="welcomeCard" class="card span-2">
-      <h3>Instructions</h3>
-      <ol class="simple-list">
-        <li>Sign in with your UnityMSK account.</li>
-        <li>Complete all 20 questions.</li>
-        <li>A 90 or above is required to pass.</li>
-        <li>If you fail, review the correct answers and retake the quiz.</li>
-        <li>On every failed retake, question order is shuffled.</li>
-      </ol>
-    </section>
+          <div class="user-panel">
+            <div class="user-row">
+              <span class="user-label">User</span>
+              <span id="userName" class="user-value">Not signed in</span>
+            </div>
+            <div class="user-actions">
+              <button id="loginBtn" class="btn btn-secondary" type="button">Sign In</button>
+              <button id="logoutBtn" class="btn btn-secondary hidden" type="button">Sign Out</button>
+            </div>
+          </div>
+        </div>
 
-    <form id="quizForm" class="card span-2" hidden></form>
-    <section id="resultCard" class="card span-2" hidden></section>
-  </main>
+        <div class="meta-row">
+          <div class="meta-chip">
+            <span class="label">Questions</span>
+            <span class="value" id="questionCount">20</span>
+          </div>
+          <div class="meta-chip">
+            <span class="label">Points Each</span>
+            <span class="value">5</span>
+          </div>
+          <div class="meta-chip">
+            <span class="label">Passing Score</span>
+            <span class="value">90%</span>
+          </div>
+          <div class="meta-chip">
+            <span class="label">Attempt</span>
+            <span class="value" id="attemptNumber">1</span>
+          </div>
+          <div class="meta-chip">
+            <span class="label">Timer</span>
+            <span class="value" id="timer">00:00</span>
+          </div>
+        </div>
+
+        <section id="introCard" class="section-block">
+          <div class="intro-grid">
+            <div class="intro-copy">
+              <h3>Before You Begin</h3>
+              <p>
+                Read each question carefully and choose the best answer. If you score below 90%,
+                you will be shown the correct answers for the questions you missed and prompted to retake the test.
+              </p>
+              <ul class="info-list">
+                <li>20 questions total</li>
+                <li>5 points per question</li>
+                <li>90% or above required to pass</li>
+                <li>Questions reorder on retake</li>
+                <li>Third failed attempt triggers admin notification</li>
+              </ul>
+            </div>
+
+            <div class="intro-panel">
+              <div class="stat-panel">
+                <span class="stat-label">Assessment Type</span>
+                <span class="stat-value">Front Desk</span>
+              </div>
+              <div class="stat-panel">
+                <span class="stat-label">Tracking</span>
+                <span class="stat-value">Attempts, Scores, Duration</span>
+              </div>
+              <div class="stat-panel">
+                <span class="stat-label">Authentication</span>
+                <span class="stat-value">Azure / Entra ID</span>
+              </div>
+              <button id="startBtn" class="btn btn-primary start-btn" type="button">
+                Begin Quiz
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <form id="quizForm" class="hidden" novalidate></form>
+
+        <section id="resultsSection" class="hidden">
+          <div id="resultCard" class="result-card"></div>
+        </section>
+      </section>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
